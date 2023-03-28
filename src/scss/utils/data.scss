@@ -1,0 +1,65 @@
+/*-------------------------------------*/
+/* ПЕРЕМЕННЫЕ */
+/*-------------------------------------*/
+
+/* Адаптив */
+$mobile: 320px;
+$tablet: 768px;
+$desktop: 1210px;
+
+/* Шрифты */
+$fontBig: "OpenSans-Bold", sans-serif;
+$fontTitle: "Raleway-Bold", sans-serif;
+$fontText: "Raleway-Regular", sans-serif;
+$fontNote: "Raleway-SemiBold", sans-serif;
+
+/* Основные цвета */
+$bodyBg: #ffffff;
+
+
+
+/*-------------------------------------*/
+/* МИКСИНЫ */
+/*-------------------------------------*/
+
+// Адаптив @include media('min', $mobile) {} @include media('min', $tablet) {} @include media('min', $desktop) {}
+@mixin media($minmax, $width) {
+  @if $minmax == max {$width: $width - 1};
+  @media only screen and (#{$minmax}-width: $width) {
+    @content;
+  }
+}
+
+@mixin mediaSection($min, $max) {
+  @media only screen and (min-width: $min) and (max-width: $max) {
+    @content;
+  }
+}
+
+// Подключение шрифтов
+@mixin font-face($font, $weight: normal, $style: normal) {
+  @font-face {
+    font-family: $font;
+    font-weight: $weight;
+    font-style: $style;
+    src: url("fonts/#{$font}.eot");
+    src: url("fonts/#{$font}.eot?#iefix") format('embedded-opentype'), url("fonts/#{$font}.woff") format('woff'), url("fonts/#{$font}.ttf") format('truetype');
+  }
+}
+
+@function strip-units($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+// Резиновая верстка для планшета
+@function sizeTablet($wElement) {
+  @return (ceil((100 / strip-units($desktop) * $wElement) * 10000) / 10000) * 1vw;
+}
+
+@mixin adaptive($property, $values...) {
+  @if $property != null and $values != null {
+    #{$property}: #{nth($values, 1)};
+    @if length($values) > 1 and #{nth($values, 2)} != false {@media only screen and (min-width: $tablet) {#{$property}: #{nth($values, 2)}}};
+    @if length($values) > 2 and #{nth($values, 3)} != false {@media only screen and (min-width: $desktop) {#{$property}: #{nth($values, 3)}}};
+  }
+}
