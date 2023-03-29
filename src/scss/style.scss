@@ -221,7 +221,7 @@ body {
     text-decoration: none;
     @include adaptive(opacity, null, 0);
     @include adaptive(height, 0, 100%);
-    transition: .4s all linear;
+    transition: .4s height, opacity linear;
     @include adaptive(transition, .4s height linear, .4s opacity linear);
     @include adaptive(transition-delay, .2s, 0s);
 
